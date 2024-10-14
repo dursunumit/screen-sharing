@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekran Paylaşımı</title>
+</head>
+<body>
+    <h1>Ekran Paylaşımı Uygulaması</h1>
+    <button id="shareScreen">Ekranı Paylaş</button>
+    <video id="video" autoplay></video>
+
+    <script>
+        const video = document.getElementById('video');
+        const shareScreenButton = document.getElementById('shareScreen');
+
+        shareScreenButton.onclick = async () => {
+            try {
+                const stream = await navigator.mediaDevices.getDisplayMedia({
+                    video: true,
+                    audio: true // Eğer sesi de paylaşmak isterseniz
+                });
+                video.srcObject = stream;
+
+                // Paylaşılan ekranın durdurulması için
+                stream.getTracks().forEach(track => {
+                    track.onended = () => {
+                        console.log("Ekran paylaşımı sona erdi.");
+                    };
+                });
+            } catch (error) {
+                console.error("Ekran paylaşımı sırasında hata:", error);
+            }
+        };
+    </script>
+</body>
+</html>
